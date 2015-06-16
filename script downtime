@@ -1,0 +1,7 @@
+datos = read.csv(file.choose(),T)
+attach(datos)
+falla=subset(time, state %in% c("failure") & event %in% c("machine"))
+repara=subset(time, state %in% c("repair") & event %in% c("finishing"))
+downtime=0
+for ( i in 1:NROW(falla)) {downtime[i]= repara[i] - falla[i]}
+mean(downtime)
