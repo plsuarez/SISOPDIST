@@ -1,0 +1,99 @@
+import java.io.File;
+import java.util.Scanner;
+
+public class Simulation {
+	//public Random generator = new Random(); // random number generator
+	public EventHeap h;
+	double now;
+	private Scanner x;
+
+	public Machine m = new Machine();
+	public Repairman r = new Repairman();
+	public User u = new User();
+	
+	public int estadotrace;
+	public double timetrace;
+	public Simulation() {
+		//generator = new Random();
+		h = new EventHeap(10000);
+		now = 0;
+	}
+
+	public void openfile () // procedimiento apertura archivo
+	{
+	
+		try {
+		x = new Scanner(new File ("c:/traces/tracesimul.txt"));
+	}
+	catch ( Exception e)
+	{
+		System.out.println("Input trace no existe");
+		}
+	}
+
+	
+	public void scheduleEvent(Event e) {
+		h.insert(e);
+	}
+	
+	public void setup() {
+		
+		while ( x.hasNext() )
+		{
+			
+			timetrace = Double.parseDouble(x.next());
+			estadotrace = Integer.parseInt(x.next());
+		
+
+		switch (estadotrace)
+		{
+		case 1:
+		case 2:
+			
+			Event machineEvent = new Event();
+			machineEvent.setHandler(m);
+			machineEvent.setType(estadotrace);
+			machineEvent.setTime(timetrace);
+			scheduleEvent(machineEvent);
+			break;
+		case 3 :
+		case 4 :
+			Event repairEvent = new Event();
+			repairEvent.setHandler(r);
+			repairEvent.setType(estadotrace);
+			repairEvent.setTime(timetrace);
+			scheduleEvent(repairEvent);
+		break;
+		case 5 :
+			Event userEvent = new Event();
+			userEvent.setHandler(u);
+			userEvent.setType(estadotrace);
+			userEvent.setTime(timetrace);
+			scheduleEvent(userEvent);
+			break;
+		default :
+			System.out.println("Evento no controlado, revise "); 
+			break;
+		}
+		}
+		
+//		
+//			
+		return;
+	}
+	
+	public void run(double maxTime) {
+		while (!h.isEmpty() && h.peek().getTime()<=maxTime) {
+			Event nextEvent = h.remove();
+			now = nextEvent.getTime();
+			nextEvent.getHandler().respondToEvent(nextEvent, this);
+		}
+	}
+	// events
+	public final int working = 1;
+	public final int failure = 2;
+	public final int startRepair = 3;
+	public final int finishRepair = 4;
+	public final int userCheck = 5;
+    
+}
