@@ -1,0 +1,16 @@
+//import java.util.Random;
+//import java.util.*;
+//import java.io.*;
+public class DiscreteEventSimulation {
+	
+	public static void main(String[] args) {
+	
+	    	
+		Simulation s = new Simulation();
+		s.openfile(); // valida/apertura el archivo
+		s.setup(); // setup simulation;
+		s.run(10000); // run of simulation
+		
+	}
+
+}
