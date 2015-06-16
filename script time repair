@@ -1,0 +1,7 @@
+datosw = read.csv(file.choose(),T)
+attach(datosw)
+reparai=subset(time, state %in% c("repair") & event %in% c("starting"))
+reparaf=subset(time, state %in% c("repair") & event %in% c("finishing"))
+repairing=0
+for ( i in 1:NROW(reparai)) {repairing[i]= reparaf[i] - reparai[i]}
+mean(repairing)
